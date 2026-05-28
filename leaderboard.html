@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}排行榜{% endblock %}
+{% block content %}
+<section class="panel">
+    <h1>全服前 10 名</h1>
+    <table class="leaderboard">
+        <thead>
+            <tr>
+                <th>名次</th>
+                <th>使用者名稱</th>
+                <th>累計答對字數</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row.username }}</td>
+                <td>{{ row.correct_total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

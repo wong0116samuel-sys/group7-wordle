@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}初始化設定{% endblock %}
+{% block content %}
+<section class="panel setup-panel">
+    <h1>建立學習計畫</h1>
+    <form method="post" class="setup-form">
+        <label>
+            初始難度
+            <select name="difficulty">
+                {% for level in levels %}
+                    <option value="{{ level }}" {% if settings and settings.difficulty == level %}selected{% endif %}>{{ level }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            單字長度
+            <select name="word_length">
+                {% for length in word_lengths %}
+                    <option value="{{ length }}" {% if settings and settings.word_length == length %}selected{% endif %}>{{ length }} 個英文字</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            學測考試日期
+            <input type="date" name="exam_date" min="{{ today_text }}" value="{{ settings.exam_date if settings else today_text }}" required>
+        </label>
+        <button type="submit">產生每日目標</button>
+    </form>
+    {% if settings %}
+    <div class="metric-strip">
+        <div>
+            <span>目前難度</span>
+            <strong>{{ settings.difficulty }}</strong>
+        </div>
+        <div>
+            <span>單字長度</span>
+            <strong>{{ settings.word_length }} 個英文字</strong>
+        </div>
+        <div>
+            <span>每日目標</span>
+            <strong>{{ settings.daily_target }}</strong>
+        </div>
+        <div>
+            <span>考試日期</span>
+            <strong>{{ settings.exam_date }}</strong>
+        </div>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

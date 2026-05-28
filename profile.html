@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}個人資訊{% endblock %}
+{% block content %}
+<section class="panel">
+    <h1>使用者資訊</h1>
+    <div class="profile-identity">
+        <div><span>帳號名稱</span><strong>{{ user.username }}</strong></div>
+        <div><span>User_ID</span><strong>{{ user.user_id }}</strong></div>
+    </div>
+</section>
+
+<section class="panel">
+    <h1>學習成就矩陣</h1>
+    <div class="level-grid">
+        {% for row in rows %}
+            <article class="level-cell">
+                <div class="cell-head"><strong>{{ row.level }}</strong><span>{{ row.learned }} / {{ row.target }}</span></div>
+                <div class="progress"><div style="width: {{ row.progress }}%"></div></div>
+                <p>進度 {{ row.progress }}%</p>
+                <p>答對率 {{ "%.0f%%"|format(row.accuracy * 100) if row.accuracy is not none else "尚無資料" }}</p>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

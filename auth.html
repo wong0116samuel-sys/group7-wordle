@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}第12組商管程專案 Wordle ：){% endblock %}
+{% block content %}
+<section class="auth-grid">
+    <form class="panel" action="{{ url_for('register') }}" method="post">
+        <h1>第12組商管程專案 Wordle ：)</h1>
+        <p>建立唯一使用者名稱，系統會自動產生你的 User_ID。</p>
+        <label>
+            使用者名稱
+            <input id="register-username" name="username" minlength="2" required autocomplete="username">
+        </label>
+        <div id="username-status" class="field-status" aria-live="polite"></div>
+        <button type="submit">註冊並開始</button>
+    </form>
+
+    <form class="panel" action="{{ url_for('login') }}" method="post">
+        <h1>後續登入</h1>
+        <p>輸入使用者名稱或 User_ID，同步你的學習進度。</p>
+        <label>
+            使用者名稱 / User_ID
+            <input name="identifier" required autocomplete="username">
+        </label>
+        <button type="submit">登入</button>
+    </form>
+</section>
+{% endblock %}

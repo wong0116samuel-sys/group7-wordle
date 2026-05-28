@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}今日挑戰{% endblock %}
+{% block content %}
+<section class="game-layout">
+    <aside class="panel compact">
+        <h2>今日任務</h2>
+        <div class="progress">
+            <div style="width: {{ status.percent }}%"></div>
+        </div>
+        <p class="big-number">{{ status.completed }} / {{ status.target }}</p>
+        <p>今日還剩 {{ status.remaining }} 個單字，未複習舊字 {{ status.due_count }} 個。</p>
+        <div class="metric-list">
+            <div><span>目前難度</span><strong>{{ settings.difficulty }}</strong></div>
+            <div><span>考試倒數</span><strong>{{ days_left }} 天</strong></div>
+            <div><span>累積答對率</span><strong>{{ "%.0f%%"|format(accuracy * 100) if accuracy is not none else "尚無資料" }}</strong></div>
+        </div>
+    </aside>
+
+    <section class="panel game-panel">
+        {% if revival_word %}
+            <h1>復活賽</h1>
+            <p class="hint-word">{{ revival_word.word }}</p>
+            <p>選出正確中文意思，答對即可獲得 2 次額外挑戰機會。</p>
+            <form action="{{ url_for('revival') }}" method="post" class="choice-grid">
+                {% for option in revival_options %}
+                    <button name="meaning" value="{{ option }}" type="submit">{{ option }}</button>
+                {% endfor %}
+            </form>
+        {% else %}
+            <div class="game-head">
+                <div>
+                    <h1>{{ word.word|length }} 個字母</h1>
+                    <p>詞性提示：{{ word.part_of_speech }} · 題庫：{{ word.level }} · 目標長度：{{ settings.word_length }}</p>
+                </div>
+                <span class="attempt-pill">{{ guesses|length }} / {{ max_attempts }}</span>
+            </div>
+
+            <div class="board" style="--letters: {{ word.word|length }}">
+                {% for guess in guesses %}
+                    <div class="row">
+                        {% for letter in guess.text %}
+                            <span class="tile {{ guess.marks[loop.index0] }}">{{ letter }}</span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                {% for _ in range(max_attempts - guesses|length) %}
+                    <div class="row ghost">
+                        {% for _ in range(word.word|length) %}
+                            <span class="tile"></span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <form method="post" class="guess-form">
+                <input id="guess-input" name="guess" maxlength="{{ word.word|length }}" minlength="{{ word.word|length }}" pattern="[A-Za-z]+" autocomplete="off" autofocus required>
+                <button type="submit">送出猜測</button>
+            </form>
+            <div class="keyboard" aria-label="虛擬鍵盤">
+                {% for row in keyboard_rows %}
+                    <div class="keyboard-row">
+                        {% if loop.last %}
+                            <button type="button" class="key key-wide" data-action="backspace">⌫</button>
+                        {% endif %}
+                        {% for key in row %}
+                            <button type="button" class="key {{ key.state }}" data-key="{{ key.letter }}">{{ key.letter }}</button>
+                        {% endfor %}
+                        {% if loop.last %}
+                            <button type="button" class="key key-wide" data-action="enter">Enter</button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+</section>
+{% endblock %}

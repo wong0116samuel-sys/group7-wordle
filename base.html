@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}第12組商管程專案 Wordle ：){% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+    <div class="ntu-backdrop" aria-hidden="true">
+        <span>NTU</span>
+        <small>國立台灣大學</small>
+    </div>
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('index') }}">第12組商管程專案 Wordle ：)</a>
+        {% if current_user %}
+        <nav>
+            <a href="{{ url_for('game') }}">今日挑戰</a>
+            <a href="{{ url_for('mistakes') }}">錯題本</a>
+            <a href="{{ url_for('profile') }}">個人資訊</a>
+            <a href="{{ url_for('leaderboard') }}">排行榜</a>
+            <a href="{{ url_for('setup') }}">設定</a>
+            <a href="{{ url_for('logout') }}">登出</a>
+        </nav>
+        {% endif %}
+    </header>
+
+    <main class="page">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <section class="messages">
+                    {% for category, message in messages %}
+                        <div class="message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
