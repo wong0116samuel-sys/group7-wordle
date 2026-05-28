@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}錯題本{% endblock %}
+{% block content %}
+<section class="mistake-layout">
+    <section class="panel">
+        <h1>錯題本</h1>
+        {% if mistakes %}
+            <ul class="word-list">
+                {% for item in mistakes %}
+                    <li><strong>{{ item.word }}</strong><span>{{ item.part_of_speech }}</span><em>{{ item.level }}</em></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>目前沒有錯題。</p>
+        {% endif %}
+    </section>
+
+    <section class="panel">
+        <h1>錯題特訓</h1>
+        {% if drill_word %}
+            <p class="hint-word">{{ drill_word.word }} <span>{{ drill_word.part_of_speech }}</span></p>
+            <form method="post" class="choice-grid">
+                <input type="hidden" name="word_id" value="{{ drill_word.id }}">
+                {% for option in options %}
+                    <button name="meaning" value="{{ option }}" type="submit">{{ option }}</button>
+                {% endfor %}
+            </form>
+        {% else %}
+            <p>答錯的單字會出現在這裡，答對後會自動移除。</p>
+        {% endif %}
+    </section>
+</section>
+{% endblock %}

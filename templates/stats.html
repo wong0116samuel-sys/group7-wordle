@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}結算{% endblock %}
+{% block content %}
+<section class="panel stats-panel">
+    <h1>單局結算</h1>
+    <div class="result {{ last_result }}">{{ "挑戰成功" if last_result == "success" else "挑戰結束" }}</div>
+    <div class="progress wide">
+        <div style="width: {{ status.percent }}%"></div>
+    </div>
+    <div class="metric-strip">
+        <div><span>今日完成</span><strong>{{ status.completed }} / {{ status.target }}</strong></div>
+        <div><span>剩餘目標</span><strong>{{ status.remaining }}</strong></div>
+        <div><span>未複習舊字</span><strong>{{ status.due_count }}</strong></div>
+        <div><span>{{ settings.difficulty }} 答對率</span><strong>{{ "%.0f%%"|format(accuracy * 100) if accuracy is not none else "尚無資料" }}</strong></div>
+    </div>
+    <p class="formula">答對率 = 1 -（該難度錯題本現有單字量 {{ mistake_count }} / 歷史總單字量 {{ history_count }}）</p>
+    <a class="button-link" href="{{ url_for('game') }}">下一題</a>
+</section>
+{% endblock %}
